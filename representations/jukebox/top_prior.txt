@@ -1,0 +1,49 @@
+# Set up language model
+hparams = setup_hparams(priors[-1], dict())
+hparams["prior_depth"] = prior_depth
+top_prior = make_prior(hparams, vqvae, device)
+
+SimplePrior(
+  (y_emb): LabelConditioner(
+    (bow_genre_emb): SimpleEmbedding(
+      (emb): Embedding(120, 4800)
+    )
+    (artist_emb): SimpleEmbedding(
+      (emb): Embedding(4111, 4800)
+    )
+    (total_length_emb): RangeEmbedding(
+      (emb): Embedding(128, 4800)
+    )
+    (absolute_pos_emb): RangeEmbedding(
+      (emb): Embedding(128, 4800)
+    )
+    (relative_pos_emb): RangeEmbedding(
+      (emb): Embedding(128, 4800)
+    )
+  )
+  (prior): ConditionalAutoregressive2D(
+    (x_emb): Embedding(2048, 4800)
+    (x_emb_dropout): Dropout(p=0.0, inplace=False)
+    (pos_emb): PositionEmbedding()
+    (pos_emb_dropout): Dropout(p=0.0, inplace=False)
+    (transformer): Transformer(
+      (_attn_mods): ModuleList(
+        (0): ResAttnBlock(
+          (attn): FactoredAttention(
+            (c_attn): Conv1D()
+            (c_proj): Conv1D()
+          )
+          (ln_0): LayerNorm((4800,), eps=1e-05, elementwise_affine=True)
+          (mlp): MLP(
+            (c_fc): Conv1D()
+            (c_proj): Conv1D()
+          )
+          (ln_1): LayerNorm((4800,), eps=1e-05, elementwise_affine=True)
+        )
+      )
+    )
+    (x_out): Linear(in_features=4800, out_features=2048, bias=False)
+    (loss): CrossEntropyLoss()
+  )
+)
+
