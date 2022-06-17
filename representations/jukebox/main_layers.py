@@ -142,7 +142,7 @@ if __name__ == "__main__":
     # for now:
     #prior_depth = 36
     #layers_upto = 72
-    layers_upto = 20
+    layers_upto = 72
     meanpool = False
     #--------------------------------
     loaded = False
@@ -197,7 +197,7 @@ if __name__ == "__main__":
                     for z, hop, i in zip(zs, vqvae.hop_lengths, range(0,3)):
                         times = np.arange(hop, JUKEBOX_SAMPLE_RATE * 25, hop) / JUKEBOX_SAMPLE_RATE
                         outz_path = pathlib.Path(output_dir, '%s_z%02i.mat' %(input_path.stem, i))
-                        scipy.io.savemat(outz_path, dict(Z=z, Times=times))
+                        scipy.io.savemat(outz_path, dict(Z=z.cpu().numpy(), Times=times))
 
                 
                 # Clear the models for the next loop
